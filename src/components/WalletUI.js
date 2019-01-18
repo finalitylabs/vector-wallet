@@ -2,7 +2,7 @@ import React from 'react';
 import "./../styles/Wallet.css";
 import DepositWithdraw from './DepositWithdraw';
 import Transfer from './Transfer';
-import UserBalance from './UserBalance';
+import UserBalance from './Userbalance';
 
 const Header = () => {
 	return (
