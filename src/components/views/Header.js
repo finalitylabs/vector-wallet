@@ -1,6 +1,6 @@
 import React from 'react';
-import "./../styles/Header.css";
-import finlabs from './../assets/finlabs.png'
+import "./../../styles/Header.css";
+import finlabs from './../../assets/finlabs.png'
 
 const Header = () => {
 	return (

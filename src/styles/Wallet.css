@@ -31,3 +31,24 @@
 	left: 25%;
 	top: 15vh;
 }
+
+.user-balance-section {
+	text-align: center;
+	margin-top: 100px;
+}
+
+.withdraw-section {
+	width: 50%;
+	margin: 20px auto;
+	display: flex;
+	justify-content: space-between
+}
+
+.withdraw-section button {
+	width: 48%;
+	padding: 15px 0;
+}
+
+.transfer-section {
+
+}

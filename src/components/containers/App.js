@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header from "./Header";
+import Header from "./../views/Header";
 import WalletUI from "./WalletUI";
 
 class App extends Component {

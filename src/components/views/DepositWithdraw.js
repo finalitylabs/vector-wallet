@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from "./Modal";
+import Modal from "./../modals/DepositWithdrawModal";
 // TODO: Make Transfer and deposit function
 
 
@@ -29,7 +29,7 @@ class DepositWithdraw extends Component {
 
 	render () {
 		return (
-			<div className="transfer-section">
+			<div className="withdraw-section">
 				<button onClick={() => this.onButtonClick("deposit")}>deposit</button>
 				<button onClick={() => this.onButtonClick("withdraw")}>withdraw</button>
 				{
