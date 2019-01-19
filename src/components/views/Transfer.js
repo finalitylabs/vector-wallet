@@ -29,28 +29,27 @@ class Transfer extends Component {
 
 	render() {
 		return(
-			<div className="transfer">
+			<div className="transfer-section">
 				<h1>Transfer</h1> 
-				<p>NOTE: Plasma Vector can't handle transactions smaller than 0.00001 VETH</p>
+				<p className="note">NOTE: Plasma Vector can't handle transactions smaller than 0.00001 VETH</p>
 				<form onSubmit={this.transfer}>
 					{/* TODO: Make the form inputs seperate components */}
-					<label>To:</label>
-					<input 
-					type="text"  
-					onChange={(e) => {
-						this.setState({to: e.target.value})
-					}}
-					value={this.state.to}
-					/>
-
-					<label>Amount:</label>
-					<input 
-					type="text"  
-					onChange={(e) => {
-						this.setState({amount: e.target.value})
-					}}
-					value={this.state.from}
-					/>
+					<div className="input-label">
+						<label>To:</label>
+						<input type="text" value={this.state.to} 
+						onChange={(e) => {
+							this.setState({to: e.target.value})
+						}}
+						/>
+					</div>
+					<div className="input-label">
+						<label>Amount:</label>
+						<input type="text" value={this.state.from}
+						onChange={(e) => {
+							this.setState({amount: e.target.value})
+						}}
+						/>
+					</div>
 					<input type="submit" value="transfer" />
 				</form>
 				<div className="error">{this.state.error}</div>

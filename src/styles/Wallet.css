@@ -50,5 +50,41 @@
 }
 
 .transfer-section {
+	text-align: center;
+	margin: 80px 0;
+}
 
+.transfer-section h1{
+	font-size: 18px;
+}
+.transfer-section .input-label{ 
+	display: flex;
+	width: 70%;
+	max-width: 500px;
+	justify-content: space-between;
+	margin: 10px auto;
+}
+.transfer-section .input-label input[type="text"]{ 
+	width: 80%;
+	max-width: 350px;
+	font-size: 14px;
+}
+.note {
+	font-size: 10px;
+	margin-bottom: 20px;
+}
+
+.transfer-section input[type="submit"] {
+	width: 24%;
+	padding: 15px 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.error {
+	font-size: 12px;
+	font-weight: 600px;
+	color: red;
+	margin: 10px 0;
 }
