@@ -3,6 +3,7 @@ import Web3 from 'web3';
 
 export default class Web3Wrapper {
 	constructor() {
+		this.metamaskInstalled = null;
 		this.provider = null;
 		this.account = null;
 		this.loggedIn = null;
@@ -12,12 +13,17 @@ export default class Web3Wrapper {
 	}
 	
 	init = async (provider) => {
-		this.provider = provider;
-		this.web3 = new Web3(provider);
-		return new Promise(async resolve => {
-			await this.getAndSetUserData()
-			resolve()
-		})
+		if (provider) {
+			this.metamaskInstalled = true;
+			this.provider = provider;
+			this.web3 = new Web3(provider);
+			return new Promise(async resolve => {
+				await this.getAndSetUserData();
+				resolve();
+			})
+		} else {
+			this.metamaskInstalled = false;
+		}
 	}
 
 	getAndSetUserData = () => {
