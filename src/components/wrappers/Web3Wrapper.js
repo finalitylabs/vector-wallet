@@ -1,9 +1,9 @@
 // TODO: Create Web3 wrapper that all settings initialzed and contract instances exported
 import Web3 from 'web3';
-import { throws } from 'assert';
 
 export default class Web3Wrapper {
 	constructor() {
+		this.provider = null;
 		this.account = null;
 		this.loggedIn = null;
 		this.network = null;
@@ -12,11 +12,23 @@ export default class Web3Wrapper {
 	}
 	
 	init = async (provider) => {
+		this.provider = provider;
 		this.web3 = new Web3(provider);
+		new Promise(async resolve => {
+			await this.getAndSetUserData()
+			resolve()
+		})
+	}
 
+	getAndSetUserData = () => {
 		return new Promise(async resolve => {
 			const accounts = await this.web3.eth.getAccounts();
 			this.loggedIn = accounts.length ? true : false;
+			
+			if (this.loggedIn === false) {
+				this.enableWallet(this.provider);
+			}
+
 			this.address = this.loggedIn ? accounts[0] : null;
 			this.trimmedAddress = this.address ? this.trimAddress(this.address) : null;
 			this.network = await this.web3.eth.net.getId()
@@ -29,9 +41,20 @@ export default class Web3Wrapper {
 		})
 	}
 
-	trimAddress = (address) => {
+	enableWallet = (provider) => {
+		return new Promise(async resolve => {
+			try {
+				await provider.enable();
+				resolve(true);
+			} catch {
+				resolve(false);
+			}
+		})
+	}
+
+ 	trimAddress = (address) => {
 		const firstChars = address.substr(0, 5);
-		const lastChars = address .substr(address.length - 6, address.length - 1);
+		const lastChars = address.substr(address.length - 6, address.length - 1);
 		const trimmedAddress = firstChars + "..." + lastChars;
 		return trimmedAddress;
 	}

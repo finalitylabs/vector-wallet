@@ -7,7 +7,7 @@ class Header extends Component {
 	render () {
 		return (
 			<div id="header">
-				<img className="header-img" src={finlabs}/>
+				<img className="header-img" alt="Finality labs logo" src={finlabs}/>
 				{
 					this.props.web3.address ? 
 					<p className="eth-address">{this.props.web3.trimmedAddress}</p> 

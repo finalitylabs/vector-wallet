@@ -15,13 +15,32 @@ class App extends Component {
 
 
   init = async () => {
-    const provider = window.web3 ? window.web3 : "http://localhost:8545";
-    await this.state.web3.init(provider)
-    this.setState({web3: this.state.web3})
-    console.log(this.state.web3)
+    const provider = window.ethereum 
+    ? 
+    window.ethereum : window.web3 
+    ? 
+    window.web3 : "http://localhost:8545";
+
+    this.state.web3.init(provider);
+    await this.state.web3.enableWallet(provider);
+    this.watchForAccountChange(provider);
+    this.setState({web3: this.state.web3});
   }
+
+  watchForAccountChange = (provider) => {
+		provider.on("accountsChanged", async accounts => {
+			if (accounts[0]) {
+				await this.state.web3.getAndSetUserData();
+			} else {
+				await this.state.web3.enableWallet();
+				await this.state.web3.getAndSetUserData();
+      }
+      this.setState({web3: this.state.web3})
+		})
+	}
   
   render() {
+    console.log("app rerendered")
     return (
       <div className="App">
         <Header web3={this.state.web3}/>
