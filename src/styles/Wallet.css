@@ -31,7 +31,18 @@
 	left: 25%;
 	top: 15vh;
 }
-
+.modal .main {
+	text-align: center;
+}
+.modal .main input[type="submit"] {
+	width: 50%;
+	margin: 20px auto;
+	padding: 15px 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	display: block;
+}
 .user-balance-section {
 	text-align: center;
 	margin-top: 100px;

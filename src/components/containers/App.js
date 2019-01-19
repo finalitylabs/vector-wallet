@@ -13,7 +13,6 @@ class App extends Component {
 
   }
 
-
   init = async () => {
     const provider = window.ethereum 
     ? 
@@ -21,7 +20,7 @@ class App extends Component {
     ? 
     window.web3 : "http://localhost:8545";
 
-    this.state.web3.init(provider);
+    await this.state.web3.init(provider);
     await this.state.web3.enableWallet(provider);
     this.watchForAccountChange(provider);
     this.setState({web3: this.state.web3});
@@ -40,11 +39,10 @@ class App extends Component {
 	}
   
   render() {
-    console.log("app rerendered")
     return (
       <div className="App">
         <Header web3={this.state.web3}/>
-        <WalletUI/>
+        <WalletUI web3={this.state.web3}/>
       </div>
     );
   }

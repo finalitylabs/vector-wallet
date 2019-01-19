@@ -4,15 +4,16 @@ class UserBalance extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			balance: 10
+			balance: null
 		}
 	}
+	
 	render() {
 		return (
 			<div className="user-balance-section">
 				<h1>Balance</h1>
-				{/* TODO: get balance from server */}
-				<div className="balance">{this.state.balance} VETH</div>
+				{/* TODO: get get VETH balance instead of ETH balance */}
+				<div className="balance">{this.props.web3.ETHBalance} VETH</div>
 			</div>
 		)
 	}

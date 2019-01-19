@@ -4,7 +4,7 @@ import finlabs from './../../assets/finlabs.png'
 
 class Header extends Component {
 
-	render () {
+	render() {
 		return (
 			<div id="header">
 				<img className="header-img" alt="Finality labs logo" src={finlabs}/>

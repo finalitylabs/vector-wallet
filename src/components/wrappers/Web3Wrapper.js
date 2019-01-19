@@ -14,7 +14,7 @@ export default class Web3Wrapper {
 	init = async (provider) => {
 		this.provider = provider;
 		this.web3 = new Web3(provider);
-		new Promise(async resolve => {
+		return new Promise(async resolve => {
 			await this.getAndSetUserData()
 			resolve()
 		})
@@ -33,12 +33,19 @@ export default class Web3Wrapper {
 			this.trimmedAddress = this.address ? this.trimAddress(this.address) : null;
 			this.network = await this.web3.eth.net.getId()
 
-			if (this.loggedIn) {
-				this.ETHBalance = await this.web3.eth.getBalance(this.address)
+			if (this.address) {
+				this.ETHBalance = await this.getBalance(this.address)
 				// TODO: get the VETH address contract instance and balance
 			}
 			resolve();
 		})
+	}
+
+	getBalance = (address) => {
+		return new Promise(async resolve => {
+			const balance = (await this.web3.eth.getBalance(address)) / ( 10 ** 18 )
+			resolve(balance);
+		});
 	}
 
 	enableWallet = (provider) => {
