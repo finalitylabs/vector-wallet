@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from "./../views/Header";
+import Footer from './../views/Footer';
 import WalletUI from "./WalletUI";
 import Web3Wrapper from "./../wrappers/Web3Wrapper";
 import Web3CheckModal from './../modals/Web3CheckModal';
@@ -57,6 +58,7 @@ class App extends Component {
       <div className="App">
         <Header web3={this.state.web3} />
         <WalletUI web3={this.state.web3} />
+        <Footer />
         {
           (!this.web3Check() && this.state.initCompleted) && <Web3CheckModal web3={this.state.web3} />
         }

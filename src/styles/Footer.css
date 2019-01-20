@@ -1,0 +1,13 @@
+#footer { 
+	display: flex;
+	justify-content: center;
+}
+
+#footer p {
+	display: inline-block;
+}
+.footer-img {
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+}

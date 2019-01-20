@@ -39,7 +39,7 @@ class DepositWithdraw extends Component {
 		return (
 			<div className="withdraw-section">
 				<button onClick={() => this.onButtonClick("deposit")}>deposit</button>
-				<button onClick={() => this.onButtonClick("withdraw")}>withdraw</button>
+				<button onClick={() => this.onButtonClick("withdraw")}>Start withdraw</button>
 				{
 					this.state.activeModal && 
 					<Modal 
