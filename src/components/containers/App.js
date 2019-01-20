@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Header from "./../views/Header";
 import Footer from './../views/Footer';
 import WalletUI from "./WalletUI";
 import Web3Wrapper from "./../wrappers/Web3Wrapper";
 import Web3CheckModal from './../modals/Web3CheckModal';
+import Withdrawals from "./../views/Withdrawals";
 import { NETWORK } from "./../../constants";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -56,8 +59,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header web3={this.state.web3} />
-        <WalletUI web3={this.state.web3} />
+        <BrowserRouter>
+          <>
+            <Header web3={this.state.web3} />
+            <Switch>
+              <Route exact path="/withdrawals" render={() => <Withdrawals />}/>
+              <Route exact path="/" render={() => <WalletUI web3={this.state.web3} />}/>
+            </Switch>
+          </>
+        </BrowserRouter>
         <Footer />
         {
           (!this.web3Check() && this.state.initCompleted) && <Web3CheckModal web3={this.state.web3} />
