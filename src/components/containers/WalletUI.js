@@ -10,7 +10,7 @@ class WalletUI extends Component {
 	render() {
 		return ( 
 			<div className="wallet-ui">
-				<SecurtyPanel />
+				<SecurtyPanel web3={this.props.web3}/>
 				<UserBalance web3={this.props.web3} vBalance={this.props.vBalance}/>
 				<DepositWithdraw web3={this.props.web3} vector={this.props.vector}/>
 				<Transfer web3={this.props.web3}/>
