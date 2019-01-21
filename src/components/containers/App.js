@@ -14,8 +14,7 @@ class App extends Component {
     super(props);
     this.state = {
       web3: new Web3Wrapper(),
-      initCompleted: false,
-      vector: new VectorClient()
+      initCompleted: false
     }
     this.init();
 
@@ -34,15 +33,16 @@ class App extends Component {
     ? 
     window.web3 : null;
 
+    let vector = new VectorClient(this.state.web3)
     await this.state.web3.init(provider);
+    let vBalance = await vector.getBalance(this.state.web3.address)
 
-    let vBalance = await this.state.vector.getBalance(this.state.web3.trimmedAddress)
-    console.log(vBalance)
     if (provider !== null) {
       this.watchForAccountChange(provider);
       await this.state.web3.enableWallet(provider);
       this.setState({
-        web3: this.state.web3, 
+        web3: this.state.web3,
+        vector: vector,
         initCompleted: true,
         vBalance: vBalance
       });
@@ -74,7 +74,7 @@ class App extends Component {
             <Header web3={this.state.web3} />
             <Switch>
               <Route exact path="/withdrawals" render={() => <Withdrawals />}/>
-              <Route exact path="/" render={() => <WalletUI web3={this.state.web3} vBalance={this.state.vBalance} />}/>
+              <Route exact path="/" render={() => <WalletUI web3={this.state.web3} vBalance={this.state.vBalance} vector={this.state.vector}/>}/>
             </Switch>
           </>
         </BrowserRouter>

@@ -14,16 +14,17 @@ class DepositWithdraw extends Component {
 		this.setState({activeModal: value})
 	}
 	deposit = async (amount) => {
-		var receiver = "0x0000000000000000000000000000000000000000";  
 		var sender = this.props.web3.account;
 
-		window.web3.eth.sendTransaction(
-		{to:receiver,
-		from:sender, 
-		value: window.web3.toWei(amount, "ether")}
-		, (err, res) => {
-			console.log(err, res)
-		})
+    await this.props.vector.deposit(amount, sender)
+
+		// window.web3.eth.sendTransaction(
+		// {to:receiver,
+		// from:sender, 
+		// value: window.web3.toWei(amount, "ether")}
+		// , (err, res) => {
+		// 	console.log(err, res)
+		// })
 	}
 
 	withdraw = (amount) => {
