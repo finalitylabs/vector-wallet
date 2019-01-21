@@ -7,13 +7,15 @@ import Web3Wrapper from "./../wrappers/Web3Wrapper";
 import Web3CheckModal from './../modals/Web3CheckModal';
 import Withdrawals from "./../views/Withdrawals";
 import { NETWORK } from "./../../constants";
+import VectorClient from "vector-client";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       web3: new Web3Wrapper(),
-      initCompleted: false
+      initCompleted: false,
+      vector: new VectorClient()
     }
     this.init();
 
@@ -33,13 +35,21 @@ class App extends Component {
     window.web3 : null;
 
     await this.state.web3.init(provider);
+
+    let vBalance = await this.state.vector.getBalance(this.state.web3.trimmedAddress)
+    console.log(vBalance)
     if (provider !== null) {
       this.watchForAccountChange(provider);
       await this.state.web3.enableWallet(provider);
-      this.setState({web3: this.state.web3, initCompleted: true});
+      this.setState({
+        web3: this.state.web3, 
+        initCompleted: true,
+        vBalance: vBalance
+      });
     } else {
       this.setState({initCompleted: true});
     }
+
   }
 
   watchForAccountChange = (provider) => {
@@ -64,7 +74,7 @@ class App extends Component {
             <Header web3={this.state.web3} />
             <Switch>
               <Route exact path="/withdrawals" render={() => <Withdrawals />}/>
-              <Route exact path="/" render={() => <WalletUI web3={this.state.web3} />}/>
+              <Route exact path="/" render={() => <WalletUI web3={this.state.web3} vBalance={this.state.vBalance} />}/>
             </Switch>
           </>
         </BrowserRouter>

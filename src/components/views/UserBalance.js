@@ -13,7 +13,7 @@ class UserBalance extends Component {
 			<div className="user-balance-section">
 				<h1>Balance</h1>
 				{/* TODO: get get VETH balance instead of ETH balance */}
-				<div className="balance">{this.props.web3.ETHBalance} VETH</div>
+				<div className="balance">{this.props.vBalance} VETH</div>
 			</div>
 		)
 	}
