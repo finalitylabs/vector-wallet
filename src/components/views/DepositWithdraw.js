@@ -15,16 +15,7 @@ class DepositWithdraw extends Component {
 	}
 	deposit = async (amount) => {
 		var sender = this.props.web3.account;
-
-    await this.props.vector.deposit(amount, sender)
-
-		// window.web3.eth.sendTransaction(
-		// {to:receiver,
-		// from:sender, 
-		// value: window.web3.toWei(amount, "ether")}
-		// , (err, res) => {
-		// 	console.log(err, res)
-		// })
+    await this.props.vector.deposit(amount, sender);
 	}
 
 	withdraw = (amount) => {
