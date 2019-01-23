@@ -27,6 +27,9 @@ export default class SecurityPanel extends Component {
 		} else {
 			const weekAgo = parseInt(moment().subtract(7, 'days').format('x'));
 			lastCheck = data.last_check_time;
+
+			// If the UNIX timestamp of the last security check is smaller than the timestamp of 
+			// one week ago, initiate security check.
 			if (lastCheck < weekAgo) {
 				this.setState({ moreThanWeekAgo: true })
 				// TODO: Do security check asap!
@@ -50,8 +53,11 @@ export default class SecurityPanel extends Component {
 		this.timer = window.setInterval(() => {
 			if (lastCheck) {
 				const now = new Date().getTime();
-				const formattedTimeSinceLastCheck = moment.utc(moment(now,"x").diff(moment(lastCheck,"x"))).format("HH:mm:ss");
-				this.setState({formattedTimeSinceLastCheck})
+				var ms = moment(now,"x").diff(moment(lastCheck,"x"));
+				var d = moment.duration(ms);
+				var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+
+				this.setState({formattedTimeSinceLastCheck: s})
 			}
 		}, 1000)
 		
