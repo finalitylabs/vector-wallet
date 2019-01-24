@@ -44,7 +44,7 @@ class App extends Component {
         web3: this.state.web3,
         vector: vector,
         initCompleted: true,
-        vBalance: vBalance
+        vBalance: parseFloat(vBalance/10000).toFixed(4)
       });
     } else {
       this.setState({initCompleted: true});
