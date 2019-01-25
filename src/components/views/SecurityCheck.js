@@ -16,7 +16,7 @@ export default class SecurityCheck {
 	
 				request.onupgradeneeded = function(event) {
 					var db = event.target.result;
-					var store = db.createObjectStore('security_checks', {keyPath: 'address'});
+					var store = db.createObjectStore('security_checks', {keyPath: 'address',autoIncrement: true});
 					store.createIndex('account_id_unique', 'id', {unique: true});
 				};
 	

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Modal from "./../modals/DepositWithdrawModal";
+import CoinStore from './CoinStore';
 // TODO: Make Transfer and deposit function
 
 
 class DepositWithdraw extends Component {
 	constructor(props) {
 		super(props)
+    this.indexedDBAvailable = window.indexedDB;
 		this.state = {
 			activeModal: false,
 		}
@@ -14,8 +16,16 @@ class DepositWithdraw extends Component {
 		this.setState({activeModal: value})
 	}
 	deposit = async (amount) => {
-		var sender = this.props.web3.account;
-    let offset = await this.props.vector.deposit(amount, sender);
+		var sender = this.props.web3.account
+    let offset = await this.props.vector.deposit(amount, sender)
+    let range = [parseInt(offset)-amount*10000, offset]
+    //let range = [349, 350]
+    console.log(range)
+    const coinStore = new CoinStore(this.props.web3)
+    const addressStore = await coinStore.init()
+    let dbres = await coinStore.add(addressStore, range)
+    const newData = await coinStore.get(addressStore, range[0])
+    console.log(newData)
     // todo, set new balance
     this.setState({activeModal:false})
 	}
