@@ -13,7 +13,7 @@ class WalletUI extends Component {
 				<SecurtyPanel web3={this.props.web3}/>
 				<UserBalance web3={this.props.web3} vBalance={this.props.vBalance}/>
 				<DepositWithdraw web3={this.props.web3} vector={this.props.vector}/>
-				<Transfer web3={this.props.web3}/>
+				<Transfer web3={this.props.web3} vector={this.props.vector}/>
 			</div>
 		)
 	}

@@ -15,7 +15,9 @@ class DepositWithdraw extends Component {
 	}
 	deposit = async (amount) => {
 		var sender = this.props.web3.account;
-    await this.props.vector.deposit(amount, sender);
+    let offset = await this.props.vector.deposit(amount, sender);
+    // todo, set new balance
+    this.setState({activeModal:false})
 	}
 
 	withdraw = (amount) => {

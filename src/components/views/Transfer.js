@@ -12,8 +12,11 @@ class Transfer extends Component {
 		}
 	}
 
-	transfer = (e) => {
+	transfer = async (e) => {
 		e.preventDefault();
+    console.log(this.props.vector)
+    console.log(this.state.amount)
+    console.log(this.state.to)
 		// 0x0000000000000000000000000000000000000000
 		if (!Web3Utils.isAddress(this.state.to)) {
 			this.setState({error: "Invalid address"})
@@ -24,6 +27,7 @@ class Transfer extends Component {
 			return;
 		}
 
+    await this.props.vector.transfer(this.state.to, this.props.web3.address, this.state.amount)
 		// TODO: Transfer
 	}
 
