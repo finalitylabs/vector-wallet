@@ -48,8 +48,9 @@ export default class CoinStore {
   add = (store, coin) => {
     return new Promise((resolve, reject) => {
       var data = {
-        rangeStart: coin[0].toString(),
-        rangeEnd: coin[1].toString()
+        rangeStart: coin[0],
+        rangeEnd: coin[1],
+        block: coin[2]
       }
       console.log(data)
       var db_op_req = store.add(data); // IDBRequest
@@ -66,7 +67,7 @@ export default class CoinStore {
 
   get = (store, v) => {
     return new Promise((resolve, reject) => {
-      var db_op_req = store.get(v.toString()); // IDBRequest
+      var db_op_req = store.get(v); // IDBRequest
     
       db_op_req.onsuccess = function(event) {
         console.log("Store get request completed"); // true
@@ -80,15 +81,46 @@ export default class CoinStore {
 
   }
   
+  getAllKeys = (store) => {
+    return new Promise((resolve, reject) => {
+      var db_op_req = store.getAllKeys(); // IDBRequest
+    
+      db_op_req.onsuccess = function(event) {
+        console.log("Store key request completed"); // true
+        resolve(event.target.result);
+      };
+  
+      db_op_req.onerror = function(event) {
+        reject("Store key request failed")
+      };
+    })
+
+  }
+  
   put = (store, coin) => {
     return new Promise((resolve, reject) => {
       var data = {
         rangeStart: coin[0],
-        rangeEnd: coin[1]
+        rangeEnd: coin[1],
+        block: coin[2]
       }
       
       var db_op_req = store.put(data); // IDBRequest
       
+      db_op_req.onsuccess = function(event) {
+        resolve("address and time updated"); // true
+      };
+  
+      db_op_req.onerror = function(event) {
+        reject("something went wrong whilst updating address and time")
+      };
+    })
+  }
+
+  remove = (store, coin) => {
+    return new Promise((resolve, reject)=> {
+      var db_op_req = store.delete(coin.rangeStart)
+
       db_op_req.onsuccess = function(event) {
         resolve("address and time updated"); // true
       };

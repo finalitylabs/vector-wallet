@@ -8,6 +8,7 @@ import Web3CheckModal from './../modals/Web3CheckModal';
 import Withdrawals from "./../views/Withdrawals";
 import { NETWORK } from "./../../constants";
 import VectorClient from "vector-client";
+import CoinStore from '../views/CoinStore';
 
 class App extends Component {
   constructor(props) {
@@ -37,6 +38,23 @@ class App extends Component {
     await this.state.web3.init(provider);
     let vBalance = await vector.getBalance(this.state.web3.address)
 
+    let receivedCoins = await vector.getReceived(this.state.web3.address)
+    console.log(receivedCoins)
+
+    // update coins db with any coins received while wallet offline
+    const coinStore = new CoinStore(this.state.web3)
+    const addressStore = await coinStore.init()
+    let keys = await coinStore.getAllKeys(addressStore)
+    for(var i=0; i<receivedCoins.length; i++) {
+      let value = await coinStore.get(addressStore, receivedCoins[i].ID[0])
+      if(value === undefined) {
+        console.log('received new tx: '+ receivedCoins[i])
+        let c = [receivedCoins[i].ID[0],receivedCoins[i].ID[1],receivedCoins[i].Block]
+        console.log(c)
+        await coinStore.add(addressStore, c)
+      }
+    }
+
     if (provider !== null) {
       this.watchForAccountChange(provider);
       await this.state.web3.enableWallet(provider);
@@ -44,7 +62,9 @@ class App extends Component {
         web3: this.state.web3,
         vector: vector,
         initCompleted: true,
-        vBalance: parseFloat(vBalance/10000).toFixed(4)
+        vBalance: parseFloat(vBalance/10000).toFixed(4),
+        coinStore: coinStore,
+        addressStore: addressStore
       });
     } else {
       this.setState({initCompleted: true});

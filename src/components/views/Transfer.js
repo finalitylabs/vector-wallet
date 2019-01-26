@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Web3Utils from 'web3-utils';
+import CoinStore from './CoinStore';
 
 class Transfer extends Component {
 	constructor(props) {
@@ -27,9 +28,35 @@ class Transfer extends Component {
 			return;
 		}
 
-    await this.props.vector.transfer(this.state.to, this.props.web3.address, this.state.amount)
-		// TODO: Transfer
+    let coin = await this.getCoins(Math.ceil(parseFloat(this.state.amount)*10000))
+    if(coin === false) {
+      console.log('No coin matching amount found')
+      return
+    }
+    console.log(coin)
+
+    //await this.props.vector.transfer(coin.block, this.state.to, this.props.web3.address, coin.rangeStart, coin.rangeEnd)
+		// remove transfered coin from local db
+    const coinStore = new CoinStore(this.props.web3)
+    const addressStore = await coinStore.init()
+    await coinStore.remove(addressStore, coin)
 	}
+
+  getCoins = async (count) => {
+    //optimistic
+    console.log(count)
+    const coinStore = new CoinStore(this.props.web3)
+    const addressStore = await coinStore.init()
+    let keys = await coinStore.getAllKeys(addressStore)
+    for(var i=0; i<keys.length; i++) {
+      let value = await coinStore.get(addressStore, keys[i])
+      let range = parseInt(value.rangeEnd) - (value.rangeStart)
+      if(count === range) {
+        return value
+      }
+    }
+    return false
+  }
 
 	render() {
 		return(
