@@ -39,7 +39,6 @@ class App extends Component {
     let vBalance = await vector.getBalance(this.state.web3.address)
 
     let receivedCoins = await vector.getReceived(this.state.web3.address)
-    console.log(receivedCoins)
 
     // update coins db with any coins received while wallet offline
     const coinStore = new CoinStore(this.state.web3)
@@ -62,7 +61,7 @@ class App extends Component {
         web3: this.state.web3,
         vector: vector,
         initCompleted: true,
-        vBalance: parseFloat(vBalance/10000).toFixed(4),
+        vBalance: parseFloat(vBalance/100).toFixed(2),
         coinStore: coinStore,
         addressStore: addressStore
       });

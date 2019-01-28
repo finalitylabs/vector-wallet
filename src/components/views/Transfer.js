@@ -15,9 +15,6 @@ class Transfer extends Component {
 
 	transfer = async (e) => {
 		e.preventDefault();
-    console.log(this.props.vector)
-    console.log(this.state.amount)
-    console.log(this.state.to)
 		// 0x0000000000000000000000000000000000000000
 		if (!Web3Utils.isAddress(this.state.to)) {
 			this.setState({error: "Invalid address"})
@@ -28,15 +25,16 @@ class Transfer extends Component {
 			return;
 		}
 
-    let coin = await this.getCoins(Math.ceil(parseFloat(this.state.amount)*10000))
+    let coin = await this.getCoins(Math.ceil(parseFloat(this.state.amount)*100))
     if(coin === false) {
       console.log('No coin matching amount found')
       return
     }
     console.log(coin)
 
-    //await this.props.vector.transfer(coin.block, this.state.to, this.props.web3.address, coin.rangeStart, coin.rangeEnd)
+    let res = await this.props.vector.transfer(coin.block, this.state.to, this.props.web3.address, coin.rangeStart, coin.rangeEnd)
 		// remove transfered coin from local db
+    console.log(res)
     const coinStore = new CoinStore(this.props.web3)
     const addressStore = await coinStore.init()
     await coinStore.remove(addressStore, coin)

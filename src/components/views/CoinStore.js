@@ -119,6 +119,7 @@ export default class CoinStore {
 
   remove = (store, coin) => {
     return new Promise((resolve, reject)=> {
+      console.log('deleting ' + coin.rangeStart)
       var db_op_req = store.delete(coin.rangeStart)
 
       db_op_req.onsuccess = function(event) {
