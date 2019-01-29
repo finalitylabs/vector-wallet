@@ -20,13 +20,13 @@ class DepositWithdraw extends Component {
     console.log('Depositing :' + amount)
     let res = await this.props.vector.deposit(amount, sender)
     console.log(res)
-    let range = [parseInt(res.offset)-amount*100, parseInt(res.offset), res.block]
-    //let range = [349, 350]
-    console.log(range)
+    let index = [parseInt(res.offset)-amount*100, parseInt(res.offset)]
+    let coin = {rangeStart:parseInt(res.offset)-amount*100, rangeEnd:parseInt(res.offset), index:[index], block:res.block}
+    console.log(coin)
     const coinStore = new CoinStore(this.props.web3)
     const addressStore = await coinStore.init()
-    let dbres = await coinStore.add(addressStore, range)
-    const newData = await coinStore.get(addressStore, range[0])
+    let dbres = await coinStore.add(addressStore, coin)
+    const newData = await coinStore.get(addressStore, coin.rangeStart)
     console.log(newData)
     // todo, set new balance
     this.setState({activeModal:false})

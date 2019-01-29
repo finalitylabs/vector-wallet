@@ -25,19 +25,45 @@ class Transfer extends Component {
 			return;
 		}
 
-    let coin = await this.getCoins(Math.ceil(parseFloat(this.state.amount)*100))
-    if(coin === false) {
+    let _amt = Math.ceil(parseFloat(this.state.amount)*100)
+    let coin = await this.getCoins(_amt)
+    if(coin.value === false) {
       console.log('No coin matching amount found')
       return
     }
     console.log(coin)
 
-    let res = await this.props.vector.transfer(coin.block, this.state.to, this.props.web3.address, coin.rangeStart, coin.rangeEnd)
-		// remove transfered coin from local db
-    console.log(res)
-    const coinStore = new CoinStore(this.props.web3)
-    const addressStore = await coinStore.init()
-    await coinStore.remove(addressStore, coin)
+    if(coin.offset === 0) {
+      console.log('no remainder coin')
+      let res = await this.props.vector.transfer(_amt, [coin.value.block], this.state.to, this.props.web3.address, coin.index)
+      // remove transfered coin from local db
+      console.log(res)
+      const coinStore = new CoinStore(this.props.web3)
+      const addressStore = await coinStore.init()
+      await coinStore.remove(addressStore, coin.value)
+
+    } else {
+      console.log('remainder coin generated')
+      let newRangeStart = coin.value.rangeEnd - coin.offset
+      let res
+      res = await this.props.vector.transfer(_amt, coin.blocks, this.state.to, this.props.web3.address, coin.index)
+      let newCoin = {rangeStart:newRangeStart, rangeEnd:coin.rangeEnd, block:res.block, index:[[newRangeStart, coin.value.rangeEnd]]}
+      console.log(newCoin)
+
+      for(var i=0; i<coin.index.length; i++) {
+        //remove spent coins
+        const coinStore = new CoinStore(this.props.web3)
+        const addressStore = await coinStore.init()
+        console.log('deleting')
+        await coinStore.remove(addressStore, {rangeStart:coin.index[i][0]})
+      }
+
+      // add new coin to db
+      const coinStore = new CoinStore(this.props.web3)
+      const addressStore = await coinStore.init()
+      console.log('adding remainder coins')
+      await coinStore.add(addressStore, newCoin)
+    }    
 	}
 
   getCoins = async (count) => {
@@ -46,14 +72,37 @@ class Transfer extends Component {
     const coinStore = new CoinStore(this.props.web3)
     const addressStore = await coinStore.init()
     let keys = await coinStore.getAllKeys(addressStore)
+    // TODO, better clientside accounting
+
+    // first check to see if there is a matching ranged coin
     for(var i=0; i<keys.length; i++) {
       let value = await coinStore.get(addressStore, keys[i])
       let range = parseInt(value.rangeEnd) - (value.rangeStart)
       if(count === range) {
-        return value
+        return {value:value, offset:0, index:[[value.rangeStart, value.rangeEnd]]}
       }
     }
-    return false
+
+    // else combine or split to get to transfer value
+    let total = 0
+    let combinedKeys = []
+    let b = []
+    for(var i=0; i<keys.length; i++) {
+      let value = await coinStore.get(addressStore, keys[i])
+      let range = parseInt(value.rangeEnd) - (value.rangeStart)
+      total = total + range
+      b.push(value.block)
+      console.log(total)
+      combinedKeys.push([value.rangeStart, value.rangeEnd])
+      if(total >= count) {
+        let off = total - count
+        combinedKeys[combinedKeys.length-1][1] = combinedKeys[combinedKeys.length-1][1] - off
+        console.log(off)
+        return {value: value, total:total, index:combinedKeys, offset:off, rangeEnd:value.rangeEnd, blocks: b}
+      }
+
+    }
+    return {value:false}
   }
 
 	render() {

@@ -47,13 +47,8 @@ export default class CoinStore {
 
   add = (store, coin) => {
     return new Promise((resolve, reject) => {
-      var data = {
-        rangeStart: coin[0],
-        rangeEnd: coin[1],
-        block: coin[2]
-      }
-      console.log(data)
-      var db_op_req = store.add(data); // IDBRequest
+      console.log(coin)
+      var db_op_req = store.add(coin); // IDBRequest
       
       db_op_req.onsuccess = function(event) {
         resolve("address and time added"); // true

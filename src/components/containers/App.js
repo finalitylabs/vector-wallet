@@ -39,16 +39,23 @@ class App extends Component {
     let vBalance = await vector.getBalance(this.state.web3.address)
 
     let receivedCoins = await vector.getReceived(this.state.web3.address)
+    console.log(receivedCoins)
 
     // update coins db with any coins received while wallet offline
     const coinStore = new CoinStore(this.state.web3)
     const addressStore = await coinStore.init()
     let keys = await coinStore.getAllKeys(addressStore)
     for(var i=0; i<receivedCoins.length; i++) {
-      let value = await coinStore.get(addressStore, receivedCoins[i].ID[0])
+      let value = await coinStore.get(addressStore, receivedCoins[i].ID[0][0])
       if(value === undefined) {
-        console.log('received new tx: '+ receivedCoins[i])
-        let c = [receivedCoins[i].ID[0],receivedCoins[i].ID[1],receivedCoins[i].Block]
+        console.log('received new tx: ')
+        console.log(receivedCoins[i])
+        let c = {
+          rangeStart:receivedCoins[i].ID[0][0],
+          rangeEnd:receivedCoins[i].ID[0][1],
+          block:receivedCoins[i].Block,
+          index:receivedCoins[i].ID
+        }
         console.log(c)
         await coinStore.add(addressStore, c)
       }
