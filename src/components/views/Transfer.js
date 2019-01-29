@@ -35,12 +35,19 @@ class Transfer extends Component {
 
     if(coin.offset === 0) {
       console.log('no remainder coin')
-      let res = await this.props.vector.transfer(_amt, [coin.value.block], this.state.to, this.props.web3.address, coin.index)
+      let res = await this.props.vector.transfer(_amt, coin.blocks, this.state.to, this.props.web3.address, coin.index)
       // remove transfered coin from local db
       console.log(res)
       const coinStore = new CoinStore(this.props.web3)
       const addressStore = await coinStore.init()
-      await coinStore.remove(addressStore, coin.value)
+      
+      for(var i=0; i<coin.index.length; i++) {
+        //remove spent coins
+        const coinStore = new CoinStore(this.props.web3)
+        const addressStore = await coinStore.init()
+        console.log('deleting')
+        await coinStore.remove(addressStore, {rangeStart:coin.index[i][0]})
+      }
 
     } else {
       console.log('remainder coin generated')
@@ -79,7 +86,7 @@ class Transfer extends Component {
       let value = await coinStore.get(addressStore, keys[i])
       let range = parseInt(value.rangeEnd) - (value.rangeStart)
       if(count === range) {
-        return {value:value, offset:0, index:[[value.rangeStart, value.rangeEnd]]}
+        return {blocks:[value.block], value:value, offset:0, index:[[value.rangeStart, value.rangeEnd]]}
       }
     }
 
