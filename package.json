@@ -8,7 +8,7 @@
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.3",
-    "vector-client": "git://github.com/finalitylabs/plasma-vector-client.git#dbcb76756cfec46d1adc42ecef1bf106493e3abf",
+    "vector-client": "^1.0.0",
     "web3": "^1.0.0-beta.37",
     "web3-utils": "^1.0.0-beta.37"
   },

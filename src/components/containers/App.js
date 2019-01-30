@@ -37,7 +37,7 @@ class App extends Component {
     let vector = new VectorClient(this.state.web3)
     await this.state.web3.init(provider);
     let vBalance = await vector.getBalance(this.state.web3.address)
-
+    console.log(vBalance)
     let receivedCoins = await vector.getReceived(this.state.web3.address)
     console.log(receivedCoins)
 
